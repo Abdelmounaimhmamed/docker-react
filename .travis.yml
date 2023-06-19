@@ -5,6 +5,6 @@ services: # tels travis that we need docker cli installed
 
 before_install: 
   - docker build -t DockerReact -f dockerfile.dev . 
-
+ 
 script: # contains all diff command to run our test   
   - docker run -e CI=true  DocekrReact npm run test -- --coverage 

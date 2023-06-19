@@ -3,8 +3,28 @@ sudo: required  # we need a super user in order to execute this build .
 services: # tels travis that we need docker cli installed 
   - docker  # tvis will install doke cli in our running container
 
+
+
+# this for initial image generation 
 before_install: 
   - docker build -t dockerreact -f dockerfile.dev . 
  
+# running some test for this image . 
 script: # contains all diff command to run our test   
   - docker run -e CI=true  dockerreact npm run test -- --coverage 
+    
+
+# aws deploy :here we tell the travis ci how to take our application and deploy it to aws 
+deploy : 
+  provider: elasticbeanstalk
+  region: "us-west-2"
+  app: "docker-react"
+  env: "docker-env"
+  bucket_name:  "elasticbeanstalk-us-west-2-3323798223"
+  bucket_path:  "docker-react"
+  on:
+      branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: 
+    secure: "$AWS_SECRET_KEY"
+    

@@ -1,0 +1,10 @@
+
+sudo: required  # we need a super user in order to execute this build . 
+services: # tels travis that we need docker cli installed 
+  - docker  # tvis will install doke cli in our running container
+
+before_install: 
+  - docker build -t DockerReact -f dockerfile.dev . 
+
+script: # contains all diff command to run our test   
+  - docker run -e CI=true  DocekrReact npm run test -- --coverage 
